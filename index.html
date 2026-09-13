@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRONFORGE | Premium Fitness Equipment Solutions</title>
+    
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
+        :root {
+            --bg-dark: #0f1115;
+            --bg-card: #181b22;
+            --accent-orange: #ff5500;
+            --accent-yellow: #ffb700;
+            --text-main: #f0f2f5;
+            --text-muted: #9a9ea7;
+            --border-color: #2a2e39;
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .brand-font {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(15, 17, 21, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .navbar {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--accent-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-orange);
+        }
+
+        .btn-nav {
+            background: var(--accent-orange);
+            color: #fff !important;
+            padding: 0.6rem 1.4rem;
+            border-radius: 4px;
+            font-weight: 700 !important;
+        }
+
+        .btn-nav:hover {
+            background: #e04b00;
+            transform: translateY(-2px);
+        }
+
+        /* --- HERO SLIDER --- */
+        .hero-slider {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(15, 17, 21, 0.9) 0%, rgba(15, 17, 21, 0.4) 100%);
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            width: 100%;
+        }
+
+        .slide-content h1 {
+            font-size: 3.8rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+            color: #fff;
+        }
+
+        .slide-content h1 span {
+            color: var(--accent-orange);
+        }
+
+        .slide-content p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+            color: var(--text-muted);
+        }
+
+        /* Slider Controls */
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(24, 27, 34, 0.6);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .slider-arrow:hover {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+        }
+
+        .prev-slide { left: 2rem; }
+        .next-slide { right: 2rem; }
+
+        /* --- BUTTONS & CTA --- */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.2rem;
+            border-radius: 4px;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--accent-orange);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #d44700;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 85, 0, 0.3);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--text-main);
+            color: var(--text-main);
+            margin-left: 1rem;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent-orange);
+            color: var(--accent-orange);
+        }
+
+        /* --- SECTION HEADINGS --- */
+        .section-padding {
+            padding: 6rem 2rem;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--accent-orange);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        /* --- EQUIPMENT SHOWCASE --- */
+        .grid-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-orange);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .product-img {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent-orange);
+            color: #fff;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 3px;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-yellow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* --- ABOUT & STATS SECTION --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-box {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-left: 4px solid var(--accent-orange);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .stat-box h3 {
+            font-size: 2rem;
+            color: var(--accent-yellow);
+        }
+
+        /* --- LOCATION & MAP --- */
+        .location-section {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+        }
+
+        .info-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .info-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-list i {
+            font-size: 1.2rem;
+            color: var(--accent-orange);
+            margin-top: 5px;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            filter: grayscale(80%) invert(90%) contrast(120%);
+        }
+
+        /* --- CONTACT FORM --- */
+        .contact-form-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            transition: var(--transition);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-orange);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #090a0c;
+            padding: 3rem 2rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1300px;
+            margin: 0 auto 3rem;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.6rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-orange);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* --- RESPONSIVE MOBILE MENU --- */
+        .mobile-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .about-grid, .location-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .mobile-toggle {
+                display: block;
+            }
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--bg-card);
+                flex-direction: column;
+                padding: 2rem;
+                display: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .slide-content h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION HEADER -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-dumbbell" style="color: var(--accent-orange);"></i>
+                IRON<span>FORGE</span>
+            </a>
+            <div class="mobile-toggle" id="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#equipment">Equipment</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#location">Showroom</a></li>
+                <li><a href="#contact" class="btn-nav">Get Quote</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO SLIDER SECTION -->
+    <section class="hero-slider" id="home">
+        <!-- Slide 1 -->
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1920');">
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <p style="color: var(--accent-orange); font-weight: 700; letter-spacing: 2px;">COMMERCIAL GRADE SYSTEMS</p>
+                <h1>ENGINEERED FOR <span>MAXIMUM PERFORMANCE</span></h1>
+                <p>Heavy-duty power racks, selectorized machines, and custom rigs built to withstand high-volume commercial environments.</p>
+                <a href="#equipment" class="btn btn-primary">Explore Products</a>
+                <a href="#contact" class="btn btn-outline">Request Catalog</a>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1920');">
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <p style="color: var(--accent-yellow); font-weight: 700; letter-spacing: 2px;">PRECISION FREE WEIGHTS</p>
+                <h1>BUILT FOR <span>CHAMPIONS</span></h1>
+                <p>Calibrated steel plates, urethane dumbbells, and Olympic bars forged with high-tensile strength alloys.</p>
+                <a href="#equipment" class="btn btn-primary">View Free Weights</a>
+            </div>
+        </div>
+
+        <!-- Slide Controls -->
+        <button class="slider-arrow prev-slide" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="slider-arrow next-slide" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+    </section>
+
+    <!-- EQUIPMENT SHOWCASE -->
+    <section class="section-padding container" id="equipment">
+        <div class="section-header">
+            <p>Catalog Overview</p>
+            <h2>Featured Gym Equipment</h2>
+        </div>
+        <div class="grid-products">
+            
+            <!-- Item 1 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&q=80&w=600');">
+                    <span class="product-badge">BESTSELLER</span>
+                </div>
+                <div class="product-info">
+                    <h3>X-7 Power Rack System</h3>
+                    <p>Heavy 3x3 11-gauge steel frame with integrated cable pulley system and multi-grip pull-up options.</p>
+                    <div class="product-price">
+                        <span>Commercial Grade</span>
+                        <i class="fa-solid fa-arrow-right" style="color: var(--accent-orange); font-size: 0.9rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600');">
+                </div>
+                <div class="product-info">
+                    <h3>Urethane Dumbbell Set</h3>
+                    <p>Solid steel core completely encased in heavy-duty CPU urethane. Ranging from 5lb to 100lb pairs.</p>
+                    <div class="product-price">
+                        <span>Precision Weight</span>
+                        <i class="fa-solid fa-arrow-right" style="color: var(--accent-orange); font-size: 0.9rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=600');">
+                    <span class="product-badge">NEW</span>
+                </div>
+                <div class="product-info">
+                    <h3>Pro-Run Curved Treadmill</h3>
+                    <p>Motorless design powered entirely by the runner. Engineered to burn 30% more calories than flat units.</p>
+                    <div class="product-price">
+                        <span>Cardio Tech</span>
+                        <i class="fa-solid fa-arrow-right" style="color: var(--accent-orange); font-size: 0.9rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=600');">
+                </div>
+                <div class="product-info">
+                    <h3>Iso-Lateral Leg Press</h3>
+                    <p>Independent leg movement for balanced muscle development. 1,000 lbs smooth capacity load.</p>
+                    <div class="product-price">
+                        <span>Strength Training</span>
+                        <i class="fa-solid fa-arrow-right" style="color: var(--accent-orange); font-size: 0.9rem;"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="section-padding" id="about" style="background: var(--bg-card); border-top: 1px solid var(--border-color);">
+        <div class="container about-grid">
+            <div class="about-text">
+                <p style="color: var(--accent-orange); font-weight: 700; letter-spacing: 2px;">WHY CHOOSE US</p>
+                <h2>OUT FITTING THE WORLD'S TOUGHEST GYMS</h2>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                    For over 15 years, IronForge has supplied commercial fitness centers, professional sports teams, and home gym enthusiasts with industrial-grade equipment built to endure peak performance.
+                </p>
+                <p style="color: var(--text-muted);">
+                    We handle every phase of the process — from 3D layout design and equipment manufacturing to professional installation and ongoing service maintenance.
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <h3>15+</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Years Experience</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>1,200+</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Gyms Outfitted</p>
+                    </div>
+                </div>
+            </div>
+            <div style="background-image: url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&q=80&w=800'); height: 400px; background-size: cover; border-radius: 8px; border: 1px solid var(--border-color);"></div>
+        </div>
+    </section>
+
+    <!-- LOCATION & SHOWROOM MAP -->
+    <section class="section-padding location-section" id="location">
+        <div class="container">
+            <div class="section-header">
+                <p>Visit Us</p>
+                <h2>Showroom & Distribution Center</h2>
+            </div>
+            <div class="location-grid">
+                <div>
+                    <h3>Test Equipment Firsthand</h3>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">
+                        Our 20,000 sq ft headquarters contains a fully operational showroom where gym owners can test our products before making bulk orders.
+                    </p>
+                    <ul class="info-list">
+                        <li>
+                            <i class="fa-solid fa-location-dot"></i>
+                            <div>
+                                <strong>Address</strong>
+                                <p style="color: var(--text-muted);">100 Fitness Boulevard, Industrial Park, NY 10001</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock"></i>
+                            <div>
+                                <strong>Operating Hours</strong>
+                                <p style="color: var(--text-muted);">Mon - Fri: 8:00 AM - 6:00 PM EST<br>Sat: By Appointment</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-phone"></i>
+                            <div>
+                                <strong>Direct Call</strong>
+                                <p style="color: var(--text-muted);">(800) 555-IRON / (800) 555-4766</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- GOOGLE MAPS EMBED -->
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830869428!2d-74.119763973046!3d40.69766371333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1680000000000!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT & QUOTE FORM -->
+    <section class="section-padding container" id="contact">
+        <div class="section-header">
+            <p>Direct Inquiries</p>
+            <h2>Request a Quote or Consultation</h2>
+        </div>
+        <div class="contact-form-wrapper">
+            <!-- Interactivity via mailto action fallback or custom JS handling -->
+            <form id="quoteForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required placeholder="john@example.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="(555) 000-0000">
+                    </div>
+                    <div class="form-group">
+                        <label for="interest">Primary Interest</label>
+                        <select id="interest">
+                            <option>Commercial Gym Outfitting</option>
+                            <option>Home Gym Equipment</option>
+                            <option>Free Weights & Accessories</option>
+                            <option>Service & Maintenance</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="message">Project Details / Requirements</label>
+                    <textarea id="message" rows="5" required placeholder="Tell us about your facility size, timeline, and equipment needs..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Send Request via Email</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="#" class="logo" style="margin-bottom: 1rem; display: inline-block;">
+                    <i class="fa-solid fa-dumbbell" style="color: var(--accent-orange);"></i> IRON<span>FORGE</span>
+                </a>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">High-performance commercial strength and conditioning systems.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#equipment">Equipment</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#location">Showroom</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Products</h4>
+                <ul class="footer-links">
+                    <li><a href="#equipment">Racks & Cages</a></li>
+                    <li><a href="#equipment">Plate-Loaded</a></li>
+                    <li><a href="#equipment">Urethane Weights</a></li>
+                    <li><a href="#equipment">Commercial Cardio</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Connect</h4>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">sales@ironforgefitness.com</p>
+                <div style="display: flex; gap: 1rem; font-size: 1.2rem;">
+                    <a href="#" style="color: var(--text-main);"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" style="color: var(--text-main);"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" style="color: var(--text-main);"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 IronForge Equipment Ltd. All rights reserved. Pitch Concept Webpage.</p>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT -->
+    <script>
+        // --- HERO SLIDER FUNCTIONALITY ---
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (index + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Event Listeners for Controls
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetTimer();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetTimer();
+        });
+
+        // Auto-advance Slides
+        function startTimer() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function resetTimer() {
+            clearInterval(slideInterval);
+            startTimer();
+        }
+
+        startTimer();
+
+        // --- MOBILE MENU TOGGLE ---
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link (mobile)
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // --- FORM SUBMISSION (EMAIL TRIGGER) ---
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const interest = document.getElementById('interest').value;
+            const message = document.getElementById('message').value;
+
+            // Construct mailto URI for simple client-side submission demonstration
+            const targetEmail = "sales@ironforgefitness.com";
+            const subject = encodeURIComponent(`Inquiry: ${interest} - ${name}`);
+            const body = encodeURIComponent(
+                `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nInterest: ${interest}\n\nMessage:\n${message}`
+            );
+
+            window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+            
+            alert('Opening your email client to dispatch this quote request...');
+        }
+    </script>
+</body>
+</html>

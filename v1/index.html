@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>
+  // This version is published at /vN/. If it is ever opened as /vN without
+  // the trailing slash, add it, so relative asset paths resolve correctly.
+  (function () {
+    var p = location.pathname;
+    if (!/\/$/.test(p) && !/\.[a-z0-9]+$/i.test(p)) location.replace(p + "/" + location.search + location.hash);
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IRONFORGE | Commercial gym equipment, fit-out and service</title>
+<meta name="description" content="IRONFORGE plans, supplies, installs and services commercial strength and cardio floors for gyms, clubs and performance centres.">
+<meta name="theme-color" content="#e7e9e4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161a19" media="(prefers-color-scheme: dark)">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=swap" rel="stylesheet">
+
+<link rel="preload" as="image" fetchpriority="high"
+      href="https://images.unsplash.com/photo-1623874514711-0f321325f318?w=1400&q=80&auto=format&fit=crop">
+
+<link rel="stylesheet" href="assets/styles.css?v=1.3">
+
+<script>
+  // Theme is resolved before first paint so the page never flashes the
+  // wrong mode. The class hook lets CSS hide the hero only when scripting
+  // is available, so a no-JS visitor still sees everything.
+  (function () {
+    var el = document.documentElement;
+    el.classList.add("js");
+    try {
+      var saved = localStorage.getItem("ironforge-theme");
+      el.setAttribute("data-theme",
+        saved || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+    } catch (e) {
+      el.setAttribute("data-theme", "light");
+    }
+  })();
+</script>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="header" data-stuck="false">
+  <div class="shell header__bar">
+    <a class="brand" href="#main" translate="no">IRONFORGE</a>
+
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a href="#equipment">Equipment</a>
+      <a href="#capability">Capability</a>
+      <a href="#showroom">Showroom</a>
+      <a class="nav__quote" href="#quote">Request a quote</a>
+    </nav>
+
+    <div class="header__end">
+      <button class="iconbtn" id="theme" type="button" aria-label="Switch to dark theme">
+        <svg class="i-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2"/>
+          <path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/>
+        </svg>
+        <svg class="i-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+        </svg>
+      </button>
+
+      <button class="iconbtn menu-btn" id="menu" type="button"
+              aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+      </button>
+
+      <a class="btn btn--solid btn--sm" href="#quote">Request a quote</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="shell hero">
+    <div class="hero__copy">
+      <h1 class="display hero__title">Equipment that outlasts your busiest hour</h1>
+
+      <p class="lede hero__lede">
+        We plan the floor, build the kit, install it, and keep it running.
+        One contract from drawing to service call.
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn--solid" href="#quote">Request a quote</a>
+        <a class="btn btn--line" href="#equipment">See the range</a>
+      </div>
+    </div>
+
+    <div class="hero__media">
+      <img src="https://images.unsplash.com/photo-1623874514711-0f321325f318?w=1400&q=80&auto=format&fit=crop"
+           alt="A warehouse training floor laid out with benches, racks and a rig."
+           width="1400" height="933" fetchpriority="high" decoding="async">
+    </div>
+  </section>
+
+  <section class="trust">
+    <div class="shell trust__row">
+      <p class="trust__label">Installed for</p>
+      <ul class="trust__names">
+        <li translate="no">Ridgeline Athletic</li>
+        <li translate="no">Kestrel Strength</li>
+        <li translate="no">Bellweather Club</li>
+        <li translate="no">Northgate Barbell</li>
+        <li translate="no">Vantage Performance</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band" id="equipment">
+    <div class="shell">
+      <div class="sched__head">
+        <h2 class="display">Four lines, specified for commercial duty</h2>
+
+        <div class="railnav">
+          <button class="iconbtn" type="button" id="prev" aria-label="Previous equipment" aria-controls="rail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <path d="M15 5l-7 7 7 7"/>
+            </svg>
+          </button>
+          <button class="iconbtn" type="button" id="next" aria-label="Next equipment" aria-controls="rail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <path d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!--
+      Category dots follow the IWF competition plate code that buyers in this
+      trade already read: blue is 20 kg, yellow is 15 kg, red is 25 kg.
+      Figures below are carried from the previous site copy and are sample
+      values. Replace them with the real product sheet before launch.
+    -->
+    <div class="shell">
+      <div class="rail" id="rail" tabindex="0" role="region" aria-label="Equipment range">
+
+        <article class="entry">
+          <p class="entry__cat">
+            <span class="entry__chip" data-plate="blue" aria-hidden="true"></span>
+            Racks and rigs
+          </p>
+          <div class="entry__media">
+            <img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=760&q=75&auto=format&fit=crop"
+                 alt="An athlete training on a wall-mounted pull-up rig."
+                 width="760" height="608" loading="lazy" decoding="async">
+          </div>
+          <h3 class="entry__name">X-7 power rack system</h3>
+          <p class="entry__desc">
+            Modular uprights with an integrated cable pulley and multi-grip pull-up
+            bar. Bolts down or free-stands.
+          </p>
+          <dl class="entry__specs">
+            <div class="spec"><dt>Steel</dt><dd>11 gauge</dd></div>
+            <div class="spec"><dt>Upright</dt><dd>3 x 3 in</dd></div>
+            <div class="spec"><dt>Rated load</dt><dd>1,000 lb</dd></div>
+          </dl>
+        </article>
+
+        <article class="entry">
+          <p class="entry__cat">
+            <span class="entry__chip" data-plate="red" aria-hidden="true"></span>
+            Free weights
+          </p>
+          <div class="entry__media">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=760&q=75&auto=format&fit=crop"
+                 alt="Rows of urethane dumbbells racked on a commercial gym floor."
+                 width="760" height="608" loading="lazy" decoding="async">
+          </div>
+          <h3 class="entry__name">Urethane dumbbell set</h3>
+          <p class="entry__desc">
+            A solid steel core fully encased in urethane. Twelve-sided heads stop the
+            roll and take the drop.
+          </p>
+          <dl class="entry__specs">
+            <div class="spec"><dt>Range</dt><dd>5 to 120 lb</dd></div>
+            <div class="spec"><dt>Pairs</dt><dd>24</dd></div>
+            <div class="spec"><dt>Warranty</dt><dd>10 years</dd></div>
+          </dl>
+        </article>
+
+        <article class="entry">
+          <p class="entry__cat">
+            <span class="entry__chip" data-plate="yellow" aria-hidden="true"></span>
+            Cardio
+          </p>
+          <div class="entry__media">
+            <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=760&q=75&auto=format&fit=crop"
+                 alt="A row of treadmills on a cardio floor beside a window wall."
+                 width="760" height="608" loading="lazy" decoding="async">
+          </div>
+          <h3 class="entry__name">Pro-Run curved treadmill</h3>
+          <p class="entry__desc">
+            Driven entirely by the runner. No motor and no cord, so there is nothing
+            to service on the drive side.
+          </p>
+          <dl class="entry__specs">
+            <div class="spec"><dt>Drive</dt><dd>Non-motorised</dd></div>
+            <div class="spec"><dt>Belt</dt><dd>Slat</dd></div>
+            <div class="spec"><dt>User capacity</dt><dd>400 lb</dd></div>
+          </dl>
+        </article>
+
+        <article class="entry">
+          <p class="entry__cat">
+            <span class="entry__chip" data-plate="blue" aria-hidden="true"></span>
+            Plate loaded
+          </p>
+          <div class="entry__media">
+            <img src="https://images.unsplash.com/photo-1546483875-ad9014c88eba?w=760&q=75&auto=format&fit=crop"
+                 alt="An adjustable bench and dumbbell rack in a low-lit training room."
+                 width="760" height="608" loading="lazy" decoding="async">
+          </div>
+          <h3 class="entry__name">Iso-lateral leg press</h3>
+          <p class="entry__desc">
+            Independent arms, so each leg moves under its own load through the full
+            range of motion.
+          </p>
+          <dl class="entry__specs">
+            <div class="spec"><dt>Loading</dt><dd>Plate</dd></div>
+            <div class="spec"><dt>Arms</dt><dd>Independent</dd></div>
+            <div class="spec"><dt>Capacity</dt><dd>1,100 lb</dd></div>
+          </dl>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="band cap" id="capability">
+    <div class="shell cap__grid">
+      <div class="cap__pin">
+        <div class="cap__figure">
+          <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=900&q=80&auto=format&fit=crop"
+               alt="A commercial gym floor with cardio machines and benches in daylight."
+               width="900" height="1125" loading="lazy" decoding="async">
+        </div>
+      </div>
+
+      <div class="cap__body">
+        <h2 class="display">We outfit gyms that never really close</h2>
+
+        <p>
+          For over 15 years we have supplied commercial fitness centres, professional
+          sports teams and university programmes with equipment built to take a full
+          day of traffic and then do it again tomorrow.
+        </p>
+
+        <p>
+          Every phase runs in house: floor layout and load planning, manufacture,
+          delivery, installation, and the maintenance schedule that follows. One crew,
+          one contract, one number to call when a cable needs replacing.
+        </p>
+
+        <dl class="figures">
+          <div class="figure">
+            <dd class="fig" data-count="15" data-suffix="+">15+</dd>
+            <dt>Years outfitting commercial floors</dt>
+          </div>
+          <div class="figure">
+            <dd class="fig" data-count="1200" data-suffix="+">1,200+</dd>
+            <dt>Installations completed</dt>
+          </div>
+          <div class="figure">
+            <dd class="fig" data-count="10" data-suffix=" yr">10 yr</dd>
+            <dt>Warranty on every frame</dt>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="shell proc__grid">
+      <div>
+        <h2 class="display">How a fit-out runs</h2>
+        <p class="lede" style="margin-top: 1.25rem">
+          Three phases, one crew, and no handoff to a subcontractor you have never met.
+        </p>
+      </div>
+
+      <div class="steps">
+        <details class="step" open>
+          <summary>Plan the floor<span class="step__sign" aria-hidden="true"></span></summary>
+          <div class="step__panel">
+            We measure the space, map how members move through it, and return a layout
+            with load points, clearances and power runs marked. You approve the floor
+            before anything ships.
+          </div>
+        </details>
+
+        <details class="step">
+          <summary>Install and commission<span class="step__sign" aria-hidden="true"></span></summary>
+          <div class="step__panel">
+            Our own crews deliver, assemble and test every station, then walk the floor
+            with you and hand over a signed commissioning sheet for each machine.
+          </div>
+        </details>
+
+        <details class="step">
+          <summary>Service it for life<span class="step__sign" aria-hidden="true"></span></summary>
+          <div class="step__panel">
+            Scheduled maintenance visits, cable and upholstery replacement, and a parts
+            inventory held in stock so a repair does not become a six-week wait.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="show" id="showroom">
+    <div class="show__grid">
+      <div class="show__media">
+        <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=1200&q=80&auto=format&fit=crop"
+             alt="A bright showroom floor with bikes, benches and racked dumbbells."
+             width="1200" height="800" loading="lazy" decoding="async">
+      </div>
+
+      <div class="show__panel">
+        <h2 class="display">Test the kit before you buy it</h2>
+        <p class="lede">
+          Our 20,000 sq ft headquarters holds a working showroom. Load a bar, run the
+          belt, and sit on every machine on your list before you commit to a bulk order.
+        </p>
+
+        <dl class="facts">
+          <div class="fact">
+            <dt>Address</dt>
+            <dd>100 Fitness Boulevard<br>Industrial Park, NY 10001</dd>
+          </div>
+          <div class="fact">
+            <dt>Hours</dt>
+            <dd class="fig">Monday to Friday, 8:00 to 18:00 EST<br>Saturday by appointment</dd>
+          </div>
+          <div class="fact">
+            <dt>Direct line</dt>
+            <dd><a class="fig" href="tel:+18005554766">(800) 555-4766</a></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="band quote" id="quote">
+    <div class="shell quote__grid">
+      <div>
+        <h2 class="display">Request a quote</h2>
+        <p class="lede" style="margin-top: 1.25rem">
+          Tell us the floor size and what you need to fit into it. You get a layout and
+          a line-item price back, usually within two working days.
+        </p>
+      </div>
+
+      <form class="form" id="form" action="mailto:sales@ironforgefitness.com" method="post" enctype="text/plain" novalidate>
+        <div class="field">
+          <label for="name">Full name</label>
+          <input id="name" name="name" type="text" autocomplete="name"
+                 placeholder="Your full name…" required>
+          <p class="err" id="name-err" aria-live="polite"></p>
+        </div>
+
+        <div class="field">
+          <label for="email">Work email</label>
+          <input id="email" name="email" type="email" autocomplete="email"
+                 inputmode="email" spellcheck="false"
+                 placeholder="name@yourgym.com" required>
+          <p class="err" id="email-err" aria-live="polite"></p>
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel"
+                 inputmode="tel" spellcheck="false" placeholder="(555) 010-0142">
+          <p class="err" id="phone-err" aria-live="polite"></p>
+        </div>
+
+        <div class="field">
+          <label for="interest">What you need</label>
+          <select id="interest" name="interest">
+            <option>A full commercial fit-out</option>
+            <option>Strength and free weights</option>
+            <option>A cardio floor</option>
+            <option>Service and maintenance</option>
+          </select>
+          <p class="err"></p>
+        </div>
+
+        <div class="field field--wide">
+          <label for="details">Project details</label>
+          <textarea id="details" name="details"
+                    placeholder="Floor size, opening date, and the stations you need…"
+                    required></textarea>
+          <p class="err" id="details-err" aria-live="polite"></p>
+        </div>
+
+        <div class="form__foot">
+          <button class="btn btn--solid" id="submit" type="submit">Request a quote</button>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer__grid">
+      <div>
+        <a class="brand" href="#main" translate="no">IRONFORGE</a>
+        <p class="footer__note">
+          Commercial strength and conditioning systems, installed and serviced by the
+          people who build them.
+        </p>
+      </div>
+
+      <div>
+        <h3>Equipment</h3>
+        <ul>
+          <li><a href="#equipment">Racks and rigs</a></li>
+          <li><a href="#equipment">Free weights</a></li>
+          <li><a href="#equipment">Plate loaded</a></li>
+          <li><a href="#equipment">Cardio</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#capability">Capability</a></li>
+          <li><a href="#showroom">Showroom</a></li>
+          <li><a href="#quote">Request a quote</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="mailto:sales@ironforgefitness.com">sales@ironforgefitness.com</a></li>
+          <li><a class="fig" href="tel:+18005554766">(800) 555-4766</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__base">
+      <div class="footer__legal">
+        <p>&copy; 2026 IronForge Equipment Ltd</p>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms and conditions</a>
+      </div>
+      <p>100 Fitness Boulevard, Industrial Park, NY 10001</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/main.js?v=1.2" defer></script>
+</body>
+</html>

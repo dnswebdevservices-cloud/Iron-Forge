@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="turf">
+<head>
+<meta charset="UTF-8">
+<script>
+  // This version is published at /vN/. If it is ever opened as /vN without
+  // the trailing slash, add it, so relative asset paths resolve correctly.
+  (function () {
+    var p = location.pathname;
+    if (!/\/$/.test(p) && !/\.[a-z0-9]+$/i.test(p)) location.replace(p + "/" + location.search + location.hash);
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IRONFORGE | Commercial gym equipment, fit-out and service</title>
+<meta name="description" content="IRONFORGE plans, supplies, installs and services commercial strength and cardio floors for gyms, clubs and performance centres.">
+<meta name="theme-color" id="theme-color" content="#e8f1ea">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
+<link rel="preload" as="image" fetchpriority="high"
+      imagesrcset="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=78&auto=format&fit=crop 800w,
+                   https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1280&q=78&auto=format&fit=crop 1280w,
+                   https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1600&q=78&auto=format&fit=crop 1600w"
+      imagesizes="(max-width: 960px) 100vw, 52vw">
+
+<link rel="stylesheet" href="assets/styles.css?v=2.5">
+
+<script>
+  // Resolve the theme before first paint so the page never flashes the
+  // wrong palette. The "js" class lets CSS stage the intro only when script
+  // is actually running.
+  (function () {
+    var el = document.documentElement;
+    var colours = { turf: "#e8f1ea", cobalt: "#eaeef7", brick: "#f6ebe6", night: "#111315" };
+    var theme = "turf";
+    el.classList.add("js");
+    try {
+      var saved = localStorage.getItem("ironforge-theme");
+      if (saved && colours[saved]) theme = saved;
+      else if (matchMedia("(prefers-color-scheme: dark)").matches) theme = "night";
+    } catch (e) {}
+    el.setAttribute("data-theme", theme);
+    document.getElementById("theme-color").setAttribute("content", colours[theme]);
+  })();
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+<script src="assets/main.js?v=2.5" defer></script>
+</head>
+
+<body>
+
+<!-- Icon sprite. Glyphs are Phosphor Icons (regular weight, MIT licence),
+     copied verbatim from @phosphor-icons/core 2.1.1. None are hand-drawn. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-arrow-up-right" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></symbol>
+  <symbol id="i-caret-left" viewBox="0 0 256 256"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></symbol>
+  <symbol id="i-caret-right" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></symbol>
+  <symbol id="i-map-pin" viewBox="0 0 256 256"><path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 256 256"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/></symbol>
+
+  <symbol id="i-arrow-left" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/></symbol>
+
+  <!-- Brand mark: a loaded bar seen side-on. Two plate sizes per side,
+       the way a real bar is loaded heaviest first. -->
+  <symbol id="logo-mark" viewBox="0 0 40 40">
+    <rect width="40" height="40" rx="11" style="fill: var(--mark-tile)"/>
+    <rect x="4.5" y="18.75" width="31" height="2.5" rx="1.25" style="fill: var(--mark-bar)"/>
+    <rect x="8.5" y="9" width="5" height="22" rx="2.5" style="fill: var(--mark-plate)"/>
+    <rect x="14.5" y="12.5" width="3.25" height="15" rx="1.625" style="fill: var(--mark-plate)"/>
+    <rect x="26.5" y="9" width="5" height="22" rx="2.5" style="fill: var(--mark-plate)"/>
+    <rect x="22.25" y="12.5" width="3.25" height="15" rx="1.625" style="fill: var(--mark-plate)"/>
+  </symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="header" data-stuck="false">
+  <div class="shell">
+    <div class="header__bar">
+      <a class="logo" href="#main" aria-label="IRONFORGE home">
+        <svg class="logo__mark" aria-hidden="true"><use href="#logo-mark"/></svg>
+        <span class="logo__word" translate="no">IRONFORGE</span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Primary">
+        <a href="#equipment">Equipment</a>
+        <a href="#capability">Capability</a>
+        <a href="#showroom">Showroom</a>
+        <a class="nav__quote" href="#quote">Request a quote</a>
+      </nav>
+
+      <div class="header__end">
+        <fieldset class="themes">
+          <legend class="sr-only">Colour theme</legend>
+          <label class="swatch" title="Turf">
+            <input type="radio" name="theme" value="turf">
+            <span class="swatch__plate" style="--plate: #2f8f57" aria-hidden="true"></span>
+            <span class="sr-only">Turf, green</span>
+          </label>
+          <label class="swatch" title="Cobalt">
+            <input type="radio" name="theme" value="cobalt">
+            <span class="swatch__plate" style="--plate: #2b52c4" aria-hidden="true"></span>
+            <span class="sr-only">Cobalt, blue</span>
+          </label>
+          <label class="swatch" title="Brick">
+            <input type="radio" name="theme" value="brick">
+            <span class="swatch__plate" style="--plate: #c2372c" aria-hidden="true"></span>
+            <span class="sr-only">Brick, red</span>
+          </label>
+          <label class="swatch" title="Night">
+            <input type="radio" name="theme" value="night">
+            <span class="swatch__plate" style="--plate: #33383d" aria-hidden="true"></span>
+            <span class="sr-only">Night, dark</span>
+          </label>
+        </fieldset>
+
+        <button class="iconbtn menu-btn" id="menu" type="button"
+                aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+          <svg class="icon" aria-hidden="true"><use href="#i-list"/></svg>
+        </button>
+
+        <a class="btn btn--primary btn--sm" href="#quote">Request a quote</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- Hero. Three text elements: headline, lede, actions. -->
+  <section class="shell hero" aria-labelledby="hero-title">
+    <h1 class="hero__title" id="hero-title">
+      <span class="line"><span style="--i: 0">Equipment that outlasts</span></span>
+      <span class="line"><span style="--i: 1">your busiest hour</span></span>
+    </h1>
+
+    <div class="hero__copy">
+      <p class="lede" style="--i: 0">
+        We plan the floor, build the kit, install it, and keep it running.
+        One contract from drawing to service call.
+      </p>
+
+      <div class="hero__actions" style="--i: 1">
+        <a class="btn btn--primary" href="#quote">
+          Request a quote
+          <span class="btn__well" aria-hidden="true"><svg class="icon"><use href="#i-arrow-up-right"/></svg></span>
+        </a>
+        <a class="btn btn--ghost" href="#equipment">See the range</a>
+      </div>
+    </div>
+
+    <div class="collage">
+      <figure class="collage__main" style="--i: 0">
+        <img srcset="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=78&auto=format&fit=crop 800w,
+                     https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1280&q=78&auto=format&fit=crop 1280w,
+                     https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1600&q=78&auto=format&fit=crop 1600w"
+             sizes="(max-width: 960px) 100vw, 52vw"
+             src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=1280&q=78&auto=format&fit=crop"
+             alt="A lifter setting up over a loaded barbell on a rubber gym floor."
+             width="1280" height="853" fetchpriority="high" decoding="async">
+      </figure>
+
+      <figure class="collage__tile" style="--i: 1" data-depth="40">
+        <img src="https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=480&q=75&auto=format&fit=crop"
+             alt="An athlete holding a push-up on a speckled rubber floor in front of power racks."
+             width="480" height="640" decoding="async">
+      </figure>
+
+      <a class="pcard" href="#equipment" style="--i: 2" data-depth="-56">
+        <span class="pcard__thumb">
+          <img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=160&q=70&auto=format&fit=crop"
+               alt="" width="160" height="160" decoding="async">
+        </span>
+        <span>
+          <span class="pcard__name">X-7 power rack system</span>
+          <span class="pcard__meta">Rated to 1,000 lb</span>
+        </span>
+        <span class="pcard__go" aria-hidden="true"><svg class="icon"><use href="#i-arrow-up-right"/></svg></span>
+      </a>
+
+      <p class="statcard" style="--i: 3" data-depth="-28">
+        <span class="statcard__value fig">10 yr</span>
+        <span class="statcard__label">Warranty on every frame</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- Client marks. Placeholder clients, so each gets a drawn mark rather
+       than a plain-text wordmark. Replace with real client logos. -->
+  <section class="clients" aria-label="Clients">
+    <div class="shell">
+      <div class="clients__row">
+        <p class="clients__label">Installed for</p>
+        <ul class="clients__list">
+          <li class="client client--a" translate="no">
+            <svg viewBox="0 0 28 28" aria-hidden="true"><path fill="currentColor" d="M2 23 10 8l5 8 3-4 8 11Z"/></svg>
+            Ridgeline
+          </li>
+          <li class="client client--b" translate="no">
+            <svg viewBox="0 0 28 28" aria-hidden="true"><path fill="currentColor" d="M3 6h5l7 8-7 8H3l7-8Zm9 0h5l7 8-7 8h-5l7-8Z"/></svg>
+            KESTREL
+          </li>
+          <li class="client client--c" translate="no">
+            <svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11" fill="none" stroke="currentColor" stroke-width="2.5"/><path fill="currentColor" d="M14 3a11 11 0 0 1 0 22Z"/></svg>
+            bellweather
+          </li>
+          <li class="client client--d" translate="no">
+            <svg viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="6" fill="currentColor"/><path d="M8 20V8l12 12V8" fill="none" stroke="var(--ground)" stroke-width="2.6" stroke-linejoin="round"/></svg>
+            Northgate
+          </li>
+          <li class="client client--e" translate="no">
+            <svg viewBox="0 0 28 28" aria-hidden="true"><path fill="currentColor" d="M2 5h7l5 11 5-11h7L14 25Z"/></svg>
+            Vantage
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Capability. Four cells, four pieces of content. -->
+  <section class="band" id="capability" aria-labelledby="cap-title">
+    <div class="shell">
+      <div class="bento" id="bento">
+        <article class="cell cell--story" style="--i: 0">
+          <div>
+            <h2 id="cap-title">We outfit gyms that never really close</h2>
+            <p>
+              Commercial centres, pro teams and university programmes have run our
+              equipment through full days of traffic for over 15 years.
+            </p>
+          </div>
+          <a class="textlink" href="#process">
+            See how a fit-out runs
+            <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          </a>
+        </article>
+
+        <figure class="cell cell--photo" style="--i: 1">
+          <img srcset="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=720&q=76&auto=format&fit=crop 720w,
+                       https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=1200&q=76&auto=format&fit=crop 1200w"
+               sizes="(max-width: 960px) 100vw, 50vw"
+               src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=1200&q=76&auto=format&fit=crop"
+               alt="A bright studio floor with bikes, benches and racked dumbbells."
+               width="1200" height="800" loading="lazy" decoding="async">
+        </figure>
+
+        <div class="cell cell--stat is-tint" style="--i: 2">
+          <p class="stat__value fig" data-count="15" data-suffix="+">15+</p>
+          <p class="stat__label">Years outfitting commercial floors</p>
+        </div>
+
+        <div class="cell cell--stat is-accent" style="--i: 3">
+          <p class="stat__value fig" data-count="1200" data-suffix="+">1,200+</p>
+          <p class="stat__label">Installations completed</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Equipment. Pins and pans on desktop; scroll-snap rail elsewhere.
+       Plate chips follow the IWF code: green 10 kg, yellow 15 kg,
+       blue 20 kg, red 25 kg. Specs are sample values carried from the
+       previous site; replace them with the real product sheet. -->
+  <section class="equip" id="equipment" aria-labelledby="equip-title">
+    <div class="equip__pin band">
+      <div class="shell equip__top">
+        <div class="section-head">
+          <h2 id="equip-title">Four lines, built for commercial duty</h2>
+          <p class="lede">Every station is specified for a full day of members, not a garage.</p>
+        </div>
+
+        <div class="railnav">
+          <button class="iconbtn" type="button" id="prev" aria-label="Previous equipment" aria-controls="rail">
+            <svg class="icon" aria-hidden="true"><use href="#i-caret-left"/></svg>
+          </button>
+          <button class="iconbtn" type="button" id="next" aria-label="Next equipment" aria-controls="rail">
+            <svg class="icon" aria-hidden="true"><use href="#i-caret-right"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="rail" id="rail" tabindex="0" role="region" aria-label="Equipment range">
+
+        <article class="panel">
+          <div class="panel__media">
+            <img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=900&q=76&auto=format&fit=crop"
+                 alt="An athlete training on a wall-mounted pull-up rig."
+                 width="900" height="1125" fetchpriority="low" decoding="async">
+          </div>
+          <div class="panel__body">
+            <p class="chip"><span class="chip__plate" style="--plate: var(--plate-blue)" aria-hidden="true"></span>Racks and rigs</p>
+            <h3 class="panel__name">X-7 power rack system</h3>
+            <p class="panel__desc">Modular uprights with an integrated cable pulley and a multi-grip pull-up bar. Bolts down or free-stands.</p>
+            <dl class="specs">
+              <div class="spec"><dt>Steel</dt><dd>11 gauge</dd></div>
+              <div class="spec"><dt>Upright</dt><dd>3 x 3 in</dd></div>
+              <div class="spec"><dt>Rated load</dt><dd>1,000 lb</dd></div>
+            </dl>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel__media">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=900&q=76&auto=format&fit=crop"
+                 alt="Rows of urethane dumbbells racked on a commercial gym floor."
+                 width="900" height="1125" fetchpriority="low" decoding="async">
+          </div>
+          <div class="panel__body">
+            <p class="chip"><span class="chip__plate" style="--plate: var(--plate-red)" aria-hidden="true"></span>Free weights</p>
+            <h3 class="panel__name">Urethane dumbbell set</h3>
+            <p class="panel__desc">A solid steel core fully encased in urethane. 12-sided heads stop the roll and take the drop.</p>
+            <dl class="specs">
+              <div class="spec"><dt>Range</dt><dd>5 to 120 lb</dd></div>
+              <div class="spec"><dt>Pairs</dt><dd>24</dd></div>
+              <div class="spec"><dt>Warranty</dt><dd>10 years</dd></div>
+            </dl>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel__media">
+            <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?w=900&q=76&auto=format&fit=crop"
+                 alt="A row of treadmills on a cardio floor beside a window wall."
+                 width="900" height="1125" fetchpriority="low" decoding="async">
+          </div>
+          <div class="panel__body">
+            <p class="chip"><span class="chip__plate" style="--plate: var(--plate-yellow)" aria-hidden="true"></span>Cardio</p>
+            <h3 class="panel__name">Pro-Run curved treadmill</h3>
+            <p class="panel__desc">Driven entirely by the runner. No motor and no cord, so there is nothing to service on the drive side.</p>
+            <dl class="specs">
+              <div class="spec"><dt>Drive</dt><dd>Non-motorised</dd></div>
+              <div class="spec"><dt>Belt</dt><dd>Slat</dd></div>
+              <div class="spec"><dt>User capacity</dt><dd>400 lb</dd></div>
+            </dl>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel__media">
+            <img src="https://images.unsplash.com/photo-1546483875-ad9014c88eba?w=900&q=76&auto=format&fit=crop"
+                 alt="An adjustable bench and dumbbell rack in a low-lit training room."
+                 width="900" height="1125" fetchpriority="low" decoding="async">
+          </div>
+          <div class="panel__body">
+            <p class="chip"><span class="chip__plate" style="--plate: var(--plate-green)" aria-hidden="true"></span>Plate loaded</p>
+            <h3 class="panel__name">Iso-lateral leg press</h3>
+            <p class="panel__desc">Independent arms, so each leg moves under its own load through the full range of motion.</p>
+            <dl class="specs">
+              <div class="spec"><dt>Loading</dt><dd>Plate</dd></div>
+              <div class="spec"><dt>Arms</dt><dd>Independent</dd></div>
+              <div class="spec"><dt>Capacity</dt><dd>1,100 lb</dd></div>
+            </dl>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Process. A vertical stack of disclosure rows. -->
+  <section class="band" id="process" aria-labelledby="proc-title">
+    <div class="shell">
+      <div class="section-head">
+        <h2 id="proc-title">How a fit-out runs</h2>
+        <p class="lede">3 phases, one crew, and no handoff to a subcontractor you have never met.</p>
+      </div>
+
+      <div class="steps">
+        <details class="step" open>
+          <summary>
+            Plan the floor
+            <span class="step__icon" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+          </summary>
+          <div class="step__panel">
+            We measure the space, map how members move through it, and return a layout
+            with load points, clearances and power runs marked. You approve the floor
+            before anything ships.
+          </div>
+        </details>
+
+        <details class="step">
+          <summary>
+            Install and commission
+            <span class="step__icon" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+          </summary>
+          <div class="step__panel">
+            Our own crews deliver, assemble and test every station, then walk the floor
+            with you and hand over a signed commissioning sheet for each machine.
+          </div>
+        </details>
+
+        <details class="step">
+          <summary>
+            Service it for life
+            <span class="step__icon" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span>
+          </summary>
+          <div class="step__panel">
+            Scheduled maintenance visits, cable and upholstery replacement, and a parts
+            inventory held in stock so a repair does not become a 6-week wait.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showroom -->
+  <section class="band" id="showroom" aria-labelledby="show-title">
+    <div class="shell">
+      <div class="show__band">
+        <img id="show-img"
+             srcset="https://images.unsplash.com/photo-1623874514711-0f321325f318?w=900&q=78&auto=format&fit=crop 900w,
+                     https://images.unsplash.com/photo-1623874514711-0f321325f318?w=1600&q=78&auto=format&fit=crop 1600w"
+             sizes="(max-width: 1400px) 100vw, 1400px"
+             src="https://images.unsplash.com/photo-1623874514711-0f321325f318?w=1600&q=78&auto=format&fit=crop"
+             alt="A warehouse training floor laid out with benches, racks and a rig."
+             width="1600" height="1067" loading="lazy" decoding="async">
+      </div>
+
+      <div class="show__card">
+        <h2 id="show-title">Test the kit before you buy it</h2>
+        <p class="lede">
+          Our 20,000&nbsp;sq&nbsp;ft headquarters holds a working showroom. Load a bar, run
+          the belt, and sit on every machine on your list before you commit.
+        </p>
+
+        <dl class="facts">
+          <div class="fact">
+            <dt><span class="fact__icon" aria-hidden="true"><svg class="icon"><use href="#i-map-pin"/></svg></span><span>Address</span></dt>
+            <dd>100 Fitness Boulevard<br>Industrial Park, NY 10001</dd>
+          </div>
+          <div class="fact">
+            <dt><span class="fact__icon" aria-hidden="true"><svg class="icon"><use href="#i-clock"/></svg></span><span>Hours</span></dt>
+            <dd class="fig">Mon to Fri, 8:00 to 18:00 EST<br>Saturday by appointment</dd>
+          </div>
+          <div class="fact">
+            <dt><span class="fact__icon" aria-hidden="true"><svg class="icon"><use href="#i-phone"/></svg></span><span>Direct line</span></dt>
+            <dd><a class="fig" href="tel:+18005554766">(800)&nbsp;555-4766</a></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <section class="band" id="quote" aria-labelledby="quote-title">
+    <div class="shell">
+      <div class="quote__band">
+        <div class="quote__intro">
+          <h2 id="quote-title">Request a quote</h2>
+          <p>Tell us the floor size and what you need to fit into it.</p>
+          <ul class="promise">
+            <li><span class="tick" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>A layout drawn to your floor</li>
+            <li><span class="tick" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>A line-item price, no bundles</li>
+            <li><span class="tick" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>A reply within 2 working days</li>
+          </ul>
+        </div>
+
+        <div class="formcard">
+          <form class="form" id="form" action="mailto:sales@ironforgefitness.com" method="post" enctype="text/plain" novalidate>
+            <div class="field">
+              <label for="name">Full name</label>
+              <input id="name" name="name" type="text" autocomplete="name"
+                     placeholder="Your full name…" aria-describedby="name-err" required>
+              <p class="err" id="name-err" aria-live="polite"></p>
+            </div>
+
+            <div class="field">
+              <label for="email">Work email</label>
+              <input id="email" name="email" type="email" autocomplete="email"
+                     inputmode="email" spellcheck="false"
+                     placeholder="e.g. name@yourgym.com…" aria-describedby="email-err" required>
+              <p class="err" id="email-err" aria-live="polite"></p>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel"
+                     inputmode="tel" spellcheck="false"
+                     placeholder="e.g. (555) 010-0142…" aria-describedby="phone-err">
+              <p class="err" id="phone-err" aria-live="polite"></p>
+            </div>
+
+            <div class="field">
+              <label for="interest">What you need</label>
+              <select id="interest" name="interest" autocomplete="off">
+                <option>A full commercial fit-out</option>
+                <option>Strength and free weights</option>
+                <option>A cardio floor</option>
+                <option>Service and maintenance</option>
+              </select>
+              <p class="err"></p>
+            </div>
+
+            <div class="field field--wide">
+              <label for="details">Project details</label>
+              <textarea id="details" name="details" autocomplete="off"
+                        placeholder="Floor size, opening date, and the stations you need…"
+                        aria-describedby="details-err" required></textarea>
+              <p class="err" id="details-err" aria-live="polite"></p>
+            </div>
+
+            <div class="form__foot">
+              <button class="btn btn--primary" id="submit" type="submit">
+                <span class="btn__label">Request a quote</span>
+                <span class="btn__well" aria-hidden="true"><svg class="icon"><use href="#i-arrow-right"/></svg></span>
+              </button>
+              <p class="note">Opens your email app with the request filled in.</p>
+            </div>
+          </form>
+
+          <div class="done" id="done" tabindex="-1" hidden>
+            <span class="done__badge" aria-hidden="true"><svg class="icon"><use href="#i-check"/></svg></span>
+            <h3>Check your email app</h3>
+            <p>Your request is drafted and addressed to sales@ironforgefitness.com. Once you send it, you get a layout and a line-item price back within 2 working days.</p>
+            <p>No email app opened? Send the same details to <a href="mailto:sales@ironforgefitness.com">sales@ironforgefitness.com</a> or call <a class="fig" href="tel:+18005554766">(800)&nbsp;555-4766</a>.</p>
+            <button class="btn btn--ghost" id="again" type="button">Edit the request</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer__grid">
+      <div>
+        <a class="logo" href="#main" aria-label="IRONFORGE home">
+          <svg class="logo__mark" aria-hidden="true"><use href="#logo-mark"/></svg>
+          <span class="logo__word" translate="no">IRONFORGE</span>
+        </a>
+        <p class="footer__note">
+          Commercial strength and conditioning systems, installed and serviced by the
+          people who build them.
+        </p>
+      </div>
+
+      <div>
+        <h3>Equipment</h3>
+        <ul>
+          <li><a href="#equipment">Racks and rigs</a></li>
+          <li><a href="#equipment">Free weights</a></li>
+          <li><a href="#equipment">Plate loaded</a></li>
+          <li><a href="#equipment">Cardio</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="#capability">Capability</a></li>
+          <li><a href="#process">How a fit-out runs</a></li>
+          <li><a href="#showroom">Showroom</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="mailto:sales@ironforgefitness.com">sales@ironforgefitness.com</a></li>
+          <li><a class="fig" href="tel:+18005554766">(800)&nbsp;555-4766</a></li>
+          <li><a href="#quote">Request a quote</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__base">
+      <div class="footer__legal">
+        <p>&copy; 2026 IronForge Equipment Ltd</p>
+        <a href="privacy.html">Privacy policy</a>
+        <a href="terms.html">Terms and conditions</a>
+      </div>
+      <p>100 Fitness Boulevard, Industrial Park, NY 10001</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

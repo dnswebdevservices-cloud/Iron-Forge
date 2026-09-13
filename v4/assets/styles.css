@@ -1,0 +1,2043 @@
+/* ==========================================================================
+   IRONFORGE v2
+
+   Design read: B2B commercial-equipment landing for gym owners and buyers,
+   industrial fit-out language made warmer and more layered.
+   Dials: DESIGN_VARIANCE 8 / MOTION_INTENSITY 7 / VISUAL_DENSITY 4.
+
+   THEMES. Four complete palettes, named after the IWF competition plates
+   that everyone in this trade already reads: green 10 kg (Turf), blue 20 kg
+   (Cobalt), red 25 kg (Brick), and the black training bumper (Night).
+   Each theme is one neutral family plus exactly one accent. Every pair was
+   checked against WCAG AA with a script before it went in here.
+
+   SHAPE RULE. Interactive controls are pills. Cards and media are 22px.
+   Large bands are 32px. Inputs are 14px. Nothing else gets a radius.
+
+   TYPE. One family, Archivo, self-hosted as a variable font. Display and
+   body are separated by optical width, not by a second typeface.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Archivo";
+  src: url("fonts/archivo-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* --------------------------------------------------------------------------
+   Themes
+   -------------------------------------------------------------------------- */
+
+:root,
+:root[data-theme="turf"] {
+  color-scheme: light;
+  --ground:    #e8f1ea;
+  --surface:   #f7fbf7;
+  --surface-2: #d6e7da;
+  --ink:       #0f2a1e;
+  --ink-2:     #34503f;
+  --ink-3:     #526b5d;
+  --line:      #c5d8ca;
+  --accent:    #1f7a4a;
+  --accent-2:  #186a3f;
+  --on-accent: #ffffff;
+  --deep:      #123b2a;
+  --on-deep:   #e8f1ea;
+  --deep-mute: #a9c5b3;
+  --shadow:    15 42 30;
+  --mark-tile:  var(--ink);
+  --mark-bar:   var(--ground);
+  --mark-plate: #7fd49a;
+}
+
+:root[data-theme="cobalt"] {
+  color-scheme: light;
+  --ground:    #eaeef7;
+  --surface:   #f8f9fd;
+  --surface-2: #d8e0f2;
+  --ink:       #10183a;
+  --ink-2:     #39456b;
+  --ink-3:     #56628a;
+  --line:      #c9d2e8;
+  --accent:    #2b52c4;
+  --accent-2:  #2244a8;
+  --on-accent: #ffffff;
+  --deep:      #14214f;
+  --on-deep:   #eaeef7;
+  --deep-mute: #aab6dc;
+  --shadow:    16 24 58;
+  --mark-tile:  var(--ink);
+  --mark-bar:   var(--ground);
+  --mark-plate: #7d9bf5;
+}
+
+:root[data-theme="brick"] {
+  color-scheme: light;
+  --ground:    #f6ebe6;
+  --surface:   #fcf7f4;
+  --surface-2: #eed6cc;
+  --ink:       #2a120e;
+  --ink-2:     #5a3730;
+  --ink-3:     #775349;
+  --line:      #e4ccc3;
+  --accent:    #c2372c;
+  --accent-2:  #a82e24;
+  --on-accent: #ffffff;
+  --deep:      #4a1812;
+  --on-deep:   #f6ebe6;
+  --deep-mute: #dcb2a8;
+  --shadow:    42 18 14;
+  --mark-tile:  var(--ink);
+  --mark-bar:   var(--ground);
+  --mark-plate: #f08a7e;
+}
+
+:root[data-theme="night"] {
+  color-scheme: dark;
+  --ground:    #111315;
+  --surface:   #191c1f;
+  --surface-2: #23272b;
+  --ink:       #eef0f2;
+  --ink-2:     #b3b9bf;
+  --ink-3:     #8d949b;
+  --line:      #2b3035;
+  --accent:    #f2c230;
+  --accent-2:  #ffd34f;
+  --on-accent: #16130a;
+  --deep:      #1f2327;
+  --on-deep:   #eef0f2;
+  --deep-mute: #a3aab1;
+  --shadow:    0 0 0;
+  --mark-tile:  #f2c230;
+  --mark-bar:   #111315;
+  --mark-plate: #111315;
+}
+
+/* The plate code is a real-world standard, so it stays fixed across themes. */
+:root {
+  --plate-green:  #2f8f57;
+  --plate-blue:   #2b52c4;
+  --plate-yellow: #e2b021;
+  --plate-red:    #c2372c;
+
+  --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+
+  --gutter: clamp(1rem, 3.2vw, 3rem);
+  --band: clamp(4.5rem, 8vw, 7rem);
+  --measure: 58ch;
+
+  --r-card: 22px;
+  --r-band: 32px;
+  --r-input: 14px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  /* Layer scale. Nothing outside this list gets a z-index. */
+  --z-float: 2;
+  --z-header: 20;
+  --z-menu: 30;
+}
+
+/* --------------------------------------------------------------------------
+   Reset and base
+   -------------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Keeps keyboard focus and anchor jumps clear of the sticky header. */
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font);
+  font-stretch: 100%;
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; }
+
+h1, h2, h3 {
+  font-stretch: 112%;
+  font-weight: 650;
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+
+p { text-wrap: pretty; }
+
+.fig { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+.icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex: none;
+  fill: currentColor;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Focus
+   -------------------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+:focus:not(:focus-visible) { outline: none; }
+
+.skip {
+  position: absolute;
+  top: 0.5rem;
+  left: var(--gutter);
+  z-index: var(--z-menu);
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--ground);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 200ms var(--ease-out);
+}
+
+.skip:focus-visible { transform: none; }
+
+/* --------------------------------------------------------------------------
+   Layout primitives
+   -------------------------------------------------------------------------- */
+
+.shell {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.band { padding-block: var(--band); }
+
+.lede {
+  color: var(--ink-2);
+  font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
+  line-height: 1.55;
+  max-width: var(--measure);
+}
+
+.section-head { display: grid; gap: 1rem; margin-bottom: clamp(2rem, 4vw, 3.25rem); }
+.section-head h2 { font-size: clamp(2.125rem, 4.6vw, 3.75rem); max-width: 18ch; }
+
+/* --------------------------------------------------------------------------
+   Buttons. Pills. The primary carries a round icon well that turns on
+   hover, which answers the pointer rather than decorating the label.
+   -------------------------------------------------------------------------- */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  padding: 0 1.5rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9688rem;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform 180ms var(--ease-out),
+              background-color 200ms var(--ease-soft),
+              border-color 200ms var(--ease-soft),
+              color 200ms var(--ease-soft);
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  padding: 0 0.375rem 0 1.5rem;
+}
+
+/* A second tone sweeps in from the left on hover. Transform only. */
+.btn--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--accent-2);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms var(--ease-out);
+}
+
+.btn--primary:hover::before { transform: scaleX(1); }
+
+.btn__well {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--on-accent);
+  color: var(--accent);
+  transition: transform 420ms var(--ease-out);
+}
+
+.btn__well .icon { width: 1rem; height: 1rem; }
+
+.btn--primary:hover .btn__well { transform: rotate(-45deg); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.btn--ghost:hover { background: var(--surface); border-color: var(--ink-3); }
+
+.btn--sm { min-height: 2.75rem; font-size: 0.875rem; }
+.btn--sm.btn--primary { padding: 0 1.25rem; }
+
+.iconbtn {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 180ms var(--ease-out), border-color 200ms var(--ease-soft),
+              opacity 200ms var(--ease-soft);
+}
+
+.iconbtn:hover { border-color: var(--ink-3); }
+.iconbtn:active { transform: scale(0.94); }
+.iconbtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  padding-block: 0.75rem;
+}
+
+.header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  height: 4rem;
+  padding-inline: 0.75rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: background-color 300ms var(--ease-soft), border-color 300ms var(--ease-soft),
+              box-shadow 300ms var(--ease-soft);
+}
+
+/* Once the page scrolls, the bar becomes a floating pill. */
+.header[data-stuck="true"] .header__bar {
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  border-color: var(--line);
+  box-shadow: 0 10px 30px -18px rgb(var(--shadow) / 0.35);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  text-decoration: none;
+  flex: none;
+}
+
+.logo__mark { width: 2.25rem; height: 2.25rem; }
+
+.logo__word {
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  letter-spacing: 0.01em;
+}
+
+.nav { display: flex; align-items: center; gap: 0.25rem; }
+
+.nav a {
+  padding: 0.625rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: background-color 200ms var(--ease-soft), color 200ms var(--ease-soft);
+}
+
+.nav a:hover { background: var(--surface-2); color: var(--ink); }
+
+.nav__quote { display: none; }
+
+.header__end { display: flex; align-items: center; gap: 0.625rem; }
+
+/* Theme picker. Real radio inputs, so arrow keys and checked state are
+   native. Each swatch is a bumper plate seen face-on. */
+.themes {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3125rem;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  min-inline-size: 0;
+}
+
+.swatch { position: relative; display: grid; place-items: center; cursor: pointer; }
+
+.swatch input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.swatch__plate {
+  position: relative;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 50%;
+  background: var(--plate);
+  box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--plate) 72%, #000);
+  transition: transform 260ms var(--ease-out), box-shadow 260ms var(--ease-soft);
+}
+
+/* The steel hub of the plate. */
+.swatch__plate::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 50%;
+  background: #d9dde0;
+  box-shadow: inset 0 0 0 1.5px #8e959b;
+  transform: translate(-50%, -50%);
+}
+
+.swatch:hover .swatch__plate { transform: scale(1.12); }
+
+.swatch input:checked + .swatch__plate {
+  box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--plate) 72%, #000),
+              0 0 0 2px var(--surface), 0 0 0 4px var(--ink);
+}
+
+.swatch input:focus-visible + .swatch__plate {
+  outline: 2px solid var(--ink);
+  outline-offset: 5px;
+}
+
+.menu-btn { display: none; }
+
+/* --------------------------------------------------------------------------
+   Hero. Headline across the full width, then a copy column against a
+   layered collage of real photography and two floating information cards.
+   -------------------------------------------------------------------------- */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-areas:
+    "title title"
+    "copy  media";
+  column-gap: clamp(2rem, 4vw, 4rem);
+  row-gap: clamp(1.75rem, 3vw, 2.75rem);
+  padding-top: clamp(1.5rem, 3.5vw, 3rem);
+  padding-bottom: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.hero__title {
+  grid-area: title;
+  font-size: clamp(2.75rem, 6.1vw, 6rem);
+  line-height: 0.98;
+  font-stretch: 115%;
+  font-weight: 680;
+  letter-spacing: -0.035em;
+}
+
+/* Each line is a mask. The text inside rises into it on load. */
+.hero__title .line { display: block; overflow: clip; padding-bottom: 0.07em; }
+.hero__title .line > span { display: inline-block; }
+
+.hero__copy {
+  grid-area: copy;
+  /* Copy follows the headline in reading order. Bottom-aligning it against
+     the tall collage left a dead void under the headline. */
+  align-self: start;
+  display: grid;
+  gap: 2rem;
+  padding-top: clamp(0.25rem, 1vw, 0.75rem);
+}
+
+.hero__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+.collage {
+  grid-area: media;
+  position: relative;
+  min-height: clamp(22rem, 34vw, 29rem);
+}
+
+.collage__main {
+  position: absolute;
+  inset: 0 0 0 16%;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.collage__main img,
+.collage__tile img,
+.pcard__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.collage__main img { object-position: 50% 45%; }
+
+.collage__tile {
+  position: absolute;
+  left: 0;
+  bottom: -6%;
+  width: 30%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  border: 6px solid var(--ground);
+  background: var(--surface-2);
+  z-index: var(--z-float);
+}
+
+/* Floating product card. It reaches up into the headline row, which is
+   what makes the composition read as layered rather than boxed. */
+.pcard {
+  position: absolute;
+  top: -12%;
+  right: 5%;
+  z-index: var(--z-float);
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.875rem;
+  width: min(21rem, 72%);
+  padding: 0.625rem 0.75rem 0.625rem 0.625rem;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: 0 24px 48px -24px rgb(var(--shadow) / 0.45),
+              0 2px 6px -2px rgb(var(--shadow) / 0.12);
+  text-decoration: none;
+}
+
+.pcard__thumb {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.pcard__name { display: block; font-weight: 650; font-size: 0.9688rem; line-height: 1.25; }
+.pcard__meta { display: block; font-size: 0.8125rem; color: var(--ink-3); margin-top: 0.125rem; }
+
+.pcard__go {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--ground);
+  transition: transform 360ms var(--ease-out);
+}
+
+.pcard:hover .pcard__go { transform: rotate(-45deg); }
+
+/* Scroll parallax runs on the independent `translate` property, so it
+   composes with the intro animation's `transform` instead of fighting it. */
+.collage [data-depth] { translate: 0 var(--py, 0px); }
+
+.statcard {
+  position: absolute;
+  right: -2%;
+  bottom: 8%;
+  z-index: var(--z-float);
+  padding: 1rem 1.25rem;
+  border-radius: var(--r-card);
+  background: var(--deep);
+  color: var(--on-deep);
+  box-shadow: 0 24px 48px -24px rgb(var(--shadow) / 0.5);
+}
+
+.statcard__value {
+  display: block;
+  font-stretch: 118%;
+  font-weight: 700;
+  font-size: 1.875rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.statcard__label { display: block; margin-top: 0.375rem; font-size: 0.8125rem; color: var(--deep-mute); }
+
+/* --------------------------------------------------------------------------
+   Client marks. Invented clients get drawn marks, and each wordmark is set
+   at a different width and weight so the row reads as five brands.
+   -------------------------------------------------------------------------- */
+
+.clients { padding-block: clamp(1.5rem, 3vw, 2.5rem); }
+
+.clients__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1.25rem, 4vw, 3rem);
+  flex-wrap: wrap;
+  padding-block: 1.75rem;
+  border-block: 1px solid var(--line);
+}
+
+.clients__label { font-size: 0.9375rem; color: var(--ink-3); }
+
+.clients__list {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 4vw, 3.25rem);
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+}
+
+.client {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+  line-height: 1;
+  white-space: nowrap;
+  transition: color 200ms var(--ease-soft);
+}
+
+.client:hover { color: var(--ink); }
+.client svg { width: 1.625rem; height: 1.625rem; flex: none; }
+
+.client--a { font-stretch: 125%; font-weight: 700; letter-spacing: -0.01em; }
+.client--b { font-stretch: 75%; font-weight: 700; letter-spacing: 0.06em; font-size: 1.125rem; }
+.client--c { font-stretch: 100%; font-weight: 500; letter-spacing: -0.02em; }
+.client--d { font-stretch: 112%; font-weight: 650; }
+.client--e { font-stretch: 88%; font-weight: 600; letter-spacing: -0.03em; }
+
+/* --------------------------------------------------------------------------
+   Capability bento. Exactly four cells for exactly four pieces of content.
+   -------------------------------------------------------------------------- */
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.cell {
+  position: relative;
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
+
+.cell--story {
+  grid-column: span 6;
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2.5rem;
+  padding: clamp(2rem, 4vw, 3.25rem);
+  background: var(--deep);
+  color: var(--on-deep);
+  min-height: 30rem;
+}
+
+.cell--story h2 { font-size: clamp(2rem, 3.8vw, 3.25rem); max-width: 14ch; }
+.cell--story p { color: var(--deep-mute); max-width: 44ch; margin-top: 1.25rem; }
+
+.textlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid currentColor;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.textlink .icon { transition: transform 300ms var(--ease-out); }
+.textlink:hover .icon { transform: translateX(4px); }
+
+.cell--photo { grid-column: span 6; min-height: 16rem; background: var(--surface-2); }
+.cell--photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.cell--stat {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.75rem;
+  min-height: 13rem;
+}
+
+.cell--stat.is-tint { background: var(--surface-2); }
+.cell--stat.is-accent { background: var(--accent); color: var(--on-accent); }
+
+.stat__value {
+  font-stretch: 118%;
+  font-weight: 700;
+  font-size: clamp(2.5rem, 4.4vw, 3.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.stat__label { font-size: 0.9375rem; font-weight: 500; max-width: 18ch; }
+.cell--stat.is-tint .stat__label { color: var(--ink-2); }
+
+/* --------------------------------------------------------------------------
+   Equipment. On desktop the section pins and the range pans sideways as
+   you scroll. Everywhere else it is a scroll-snap rail with buttons.
+   -------------------------------------------------------------------------- */
+
+.equip { overflow: clip; }
+
+.equip__top {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.equip__top .section-head { margin-bottom: 0; }
+
+
+
+.panel {
+  flex: none;
+  width: min(88vw, 60rem);
+  scroll-snap-align: start;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.panel__media {
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface-2);
+  aspect-ratio: 4 / 5;
+}
+
+.panel__media img { width: 100%; height: 100%; object-fit: cover; }
+
+.panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.75rem 0.5rem 0.5rem;
+  min-width: 0;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  padding: 0.375rem 0.875rem 0.375rem 0.5rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.chip__plate { width: 0.875rem; height: 0.875rem; border-radius: 50%; background: var(--plate); }
+
+.panel__name { font-size: clamp(1.75rem, 3vw, 2.5rem); }
+.panel__desc { color: var(--ink-2); max-width: 38ch; }
+
+/* One tile per spec: the value large, the label small. The <dt> still comes
+   first in the markup so the pairing reads correctly to assistive tech. */
+.specs {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.spec {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.875rem;
+  border-radius: 14px;
+  background: var(--ground);
+}
+
+.spec dt { font-size: 0.75rem; color: var(--ink-3); }
+
+.spec dd {
+  margin: 0;
+  /* Normal width here: the tiles are narrow, and "anywhere" wrapping split
+     words like "Independent" mid-word. Hyphenation breaks them properly
+     only when a single word genuinely cannot fit. */
+  font-stretch: 100%;
+  font-weight: 650;
+  font-size: 1rem;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+
+
+
+
+/* --------------------------------------------------------------------------
+   Process. A vertical stack of disclosure rows.
+   -------------------------------------------------------------------------- */
+
+.steps { display: grid; gap: 0.75rem; }
+
+.step {
+  border-radius: var(--r-card);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: background-color 300ms var(--ease-soft), border-color 300ms var(--ease-soft);
+}
+
+.step[open] { background: var(--surface-2); border-color: transparent; }
+
+.step summary {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: clamp(1.25rem, 2.4vw, 1.75rem) clamp(1.25rem, 2.6vw, 2rem);
+  cursor: pointer;
+  list-style: none;
+  font-stretch: 112%;
+  font-weight: 650;
+  font-size: clamp(1.25rem, 2.3vw, 1.875rem);
+  letter-spacing: -0.025em;
+  border-radius: var(--r-card);
+}
+
+.step summary::-webkit-details-marker { display: none; }
+
+.step__icon {
+  margin-left: auto;
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--ground);
+  flex: none;
+  transition: transform 420ms var(--ease-out), background-color 300ms var(--ease-soft),
+              color 300ms var(--ease-soft);
+}
+
+.step[open] .step__icon { transform: rotate(45deg); background: var(--accent); color: var(--on-accent); }
+
+.step__panel {
+  padding: 0 clamp(1.25rem, 2.6vw, 2rem) clamp(1.5rem, 2.6vw, 2rem);
+  color: var(--ink-2);
+  max-width: 64ch;
+  font-size: 1.0625rem;
+}
+
+.step[open] .step__panel { animation: unfold 420ms var(--ease-out); }
+
+@keyframes unfold {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Showroom. A rounded photographic band with the facts card overlapping
+   its lower edge.
+   -------------------------------------------------------------------------- */
+
+.show__band {
+  position: relative;
+  height: clamp(22rem, 50vw, 36rem);
+  border-radius: var(--r-band);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.show__band img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: 50% 60%;
+}
+
+.show__card {
+  position: relative;
+  z-index: var(--z-float);
+  width: min(100%, 46rem);
+  margin: clamp(-9rem, -12vw, -5rem) 0 0 clamp(1rem, 4vw, 3rem);
+  padding: clamp(1.75rem, 3.5vw, 2.75rem);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: 0 30px 60px -32px rgb(var(--shadow) / 0.45);
+}
+
+.show__card h2 { font-size: clamp(1.875rem, 3.4vw, 2.75rem); margin-bottom: 1rem; }
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.fact { display: grid; gap: 0.25rem; align-content: start; }
+.fact dt { display: grid; gap: 0.625rem; justify-items: start; }
+
+.fact__icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--surface-2);
+}
+
+.fact dt { font-size: 0.8125rem; color: var(--ink-3); }
+.fact dd { margin: 0; font-size: 0.9375rem; line-height: 1.5; font-weight: 500; }
+.fact a { text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+/* --------------------------------------------------------------------------
+   Quote. The closing block: a deep band holding the form card.
+   -------------------------------------------------------------------------- */
+
+.quote__band {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+  border-radius: var(--r-band);
+  background: var(--deep);
+  color: var(--on-deep);
+}
+
+.quote__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(0.75rem, 2vw, 1.5rem) clamp(0.5rem, 1vw, 0.75rem);
+}
+
+.quote__intro h2 { font-size: clamp(2.25rem, 4.4vw, 3.75rem); }
+.quote__intro p { color: var(--deep-mute); max-width: 40ch; }
+
+.promise { display: grid; gap: 0.75rem; margin-top: auto; padding: 0; list-style: none; }
+
+.promise li { display: flex; align-items: center; gap: 0.75rem; font-weight: 500; }
+
+.promise .tick {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--on-deep) 14%, transparent);
+  flex: none;
+}
+
+.promise .icon { width: 0.875rem; height: 0.875rem; }
+
+.formcard {
+  position: relative;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.form[hidden] { display: none; }
+
+.field { display: grid; gap: 0.5rem; }
+.field--wide { grid-column: 1 / -1; }
+
+.field label { font-size: 0.875rem; font-weight: 600; }
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border-radius: var(--r-input);
+  border: 1px solid var(--line);
+  background: var(--ground);
+  color: var(--ink);
+  font-size: 0.9688rem;
+  transition: border-color 200ms var(--ease-soft), background-color 200ms var(--ease-soft);
+}
+
+.field textarea { resize: vertical; min-height: 8rem; }
+
+.field input::placeholder,
+.field textarea::placeholder { color: var(--ink-3); }
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover { border-color: var(--ink-3); }
+
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+  border-color: transparent;
+  background: var(--surface);
+}
+
+.err { font-size: 0.8125rem; font-weight: 500; color: var(--plate-red); min-height: 1.25em; }
+:root[data-theme="night"] .err { color: #ff8a80; }
+
+.field[data-invalid="true"] input,
+.field[data-invalid="true"] textarea { border-color: var(--plate-red); }
+
+.form__foot {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.note { font-size: 0.8125rem; color: var(--ink-3); }
+
+.btn[data-busy="true"] { pointer-events: none; }
+.btn[data-busy="true"] .btn__well { animation: busy 900ms var(--ease-soft) infinite; }
+
+@keyframes busy {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(5px); }
+}
+
+.done {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  padding: 1rem 0.25rem;
+}
+
+.done[hidden] { display: none; }
+
+.done__badge {
+  display: inline-grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.done__badge .icon { width: 1.5rem; height: 1.5rem; }
+.done h3 { font-size: 1.75rem; }
+.done p { color: var(--ink-2); max-width: 44ch; }
+
+.done:not([hidden]) { animation: unfold 520ms var(--ease-out); }
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+
+.footer { padding-block: clamp(3.5rem, 7vw, 5rem) 2rem; }
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, 1fr);
+  gap: 2.5rem;
+}
+
+.footer__note { color: var(--ink-2); font-size: 0.9375rem; max-width: 30ch; margin-top: 1rem; }
+
+.footer h3 {
+  font-size: 0.9375rem;
+  font-stretch: 100%;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-bottom: 1rem;
+}
+
+.footer ul { list-style: none; padding: 0; display: grid; gap: 0.625rem; }
+
+.footer a {
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: color 200ms var(--ease-soft);
+}
+
+.footer a:hover { color: var(--ink); }
+
+.footer__base {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 3.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.875rem;
+  color: var(--ink-3);
+}
+
+/* --------------------------------------------------------------------------
+   Load choreography. Transform and opacity only. Elements are hidden only
+   when script is running, so a no-JS visitor sees the finished page.
+   -------------------------------------------------------------------------- */
+
+.js .hero__title .line > span { transform: translateY(105%); }
+.js .hero__copy > *,
+.js .collage > * { opacity: 0; }
+
+.is-ready .hero__title .line > span {
+  animation: rise 1000ms var(--ease-out) forwards;
+  animation-delay: calc(80ms + var(--i, 0) * 110ms);
+}
+
+.is-ready .hero__copy > * {
+  animation: fadeup 800ms var(--ease-out) forwards;
+  animation-delay: calc(380ms + var(--i, 0) * 90ms);
+}
+
+.is-ready .collage > * {
+  animation: settle 1000ms var(--ease-out) forwards;
+  animation-delay: calc(260ms + var(--i, 0) * 130ms);
+}
+
+@keyframes rise   { to { transform: none; } }
+@keyframes fadeup { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes settle { from { opacity: 0; transform: translateY(28px) scale(0.96); } to { opacity: 1; transform: none; } }
+
+/* The bento assembles once when it arrives. */
+.js .bento .cell { opacity: 0; transform: translateY(24px); }
+
+.bento.is-in .cell {
+  opacity: 1;
+  transform: none;
+  transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+/* Theme switch runs through the View Transitions API: the browser snapshots
+   both states and the new one opens as a circle from the pressed swatch.
+   The default cross-fade is switched off so only that reveal plays. */
+::view-transition-old(root),
+::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+
+/* --------------------------------------------------------------------------
+   Responsive. Every multi-column block declares its own collapse.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1100px) {
+  .nav a { padding: 0.625rem 0.75rem; }
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 960px) {
+  .nav { display: none; }
+  .menu-btn { display: inline-grid; }
+
+  .nav[data-open="true"] {
+    position: fixed;
+    inset: 5.5rem var(--gutter) auto;
+    z-index: var(--z-menu);
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    border-radius: var(--r-card);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 60px -30px rgb(var(--shadow) / 0.5);
+    overscroll-behavior: contain;
+  }
+
+  .nav[data-open="true"] a { padding: 1rem 1.125rem; font-size: 1.0625rem; }
+
+  .nav[data-open="true"] .nav__quote {
+    display: block;
+    margin-top: 0.25rem;
+    background: var(--accent);
+    color: var(--on-accent);
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    grid-template-areas: "title" "copy" "media";
+  }
+
+  .collage { min-height: 24rem; margin-top: 3rem; }
+
+  .bento { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .cell--story { grid-column: span 6; grid-row: auto; min-height: 0; }
+  .cell--photo { grid-column: span 6; }
+
+  .panel { grid-template-columns: 1fr; }
+  .panel__media { aspect-ratio: 16 / 10; }
+
+  .quote__band { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .header__end > .btn { display: none; }
+  .header__bar { padding-inline: 0.5rem 0.375rem; gap: 0.5rem; }
+  .logo__word { font-size: 0.9375rem; }
+  .logo__mark { width: 2rem; height: 2rem; }
+
+  .collage { min-height: 20rem; margin-top: 1rem; }
+  .collage__main { inset: 0; }
+  .collage__tile { display: none; }
+  .pcard { top: auto; bottom: -1.75rem; right: auto; left: 0.75rem; width: calc(100% - 1.5rem); }
+  .statcard { top: 0.75rem; right: 0.75rem; bottom: auto; padding: 0.75rem 1rem; }
+  .statcard__value { font-size: 1.375rem; }
+
+  .cell--stat { grid-column: span 3; min-height: 10rem; padding: 1.25rem; }
+  .form { grid-template-columns: 1fr; }
+  .footer__grid { grid-template-columns: 1fr; }
+  .hero__actions { flex-direction: column; align-items: stretch; }
+  .show__card { margin-inline: 0; }
+}
+
+@media (max-width: 400px) {
+  .logo__word { display: none; }
+}
+
+@supports (padding: max(0px)) {
+  .shell {
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion. Everything lands in its final state immediately, and the
+   script skips the pinned pan and the parallax entirely.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .js .hero__title .line > span,
+  .js .hero__copy > *,
+  .js .collage > *,
+  .js .bento .cell { opacity: 1; transform: none; }
+}
+
+/* ==========================================================================
+   v4 layer. Improvements from the Playwright critique of v2, guided by
+   high-end-visual-design: double-bezel depth, a numbered timeline in place
+   of the accordion, ruled facts, a working quote form, a closing wordmark,
+   a full-screen mobile menu, and scroll reveals on the key blocks.
+   ========================================================================== */
+
+/* Double bezel. An outer tray with a hairline ring and 6px of padding,
+   holding an inner core with its own lit edge and a concentric radius. */
+.bezel {
+  display: block;
+  padding: 6px;
+  border-radius: calc(var(--r-card) + 6px);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.bezel__core {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.55), 0 1px 2px rgb(var(--shadow) / 0.06);
+}
+
+:root[data-theme="night"] .bezel__core { box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.06); }
+
+/* Equipment panels as bezels. */
+.panel {
+  display: block;
+  padding: 8px;
+  border: 0;
+  border-radius: calc(var(--r-card) + 8px);
+  background: var(--surface-2);
+}
+
+.panel__core {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  height: 100%;
+  padding: 1rem;
+  border-radius: calc(var(--r-card) - 2px);
+  background: var(--surface);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.55);
+}
+
+:root[data-theme="night"] .panel__core { box-shadow: inset 0 1px 1px rgb(255 255 255 / 0.06); }
+
+/* --------------------------------------------------------------------------
+   Process timeline
+   -------------------------------------------------------------------------- */
+
+.proc {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2rem, 6vw, 5.5rem);
+  align-items: start;
+}
+
+.proc__intro { position: sticky; top: 7rem; display: grid; gap: 1.25rem; }
+.proc__intro h2 { font-size: clamp(2.125rem, 4.6vw, 3.75rem); max-width: 12ch; }
+.proc__photo { margin-top: 0.75rem; }
+.proc__photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+
+.timeline { position: relative; padding-left: 4.5rem; }
+
+.timeline__rail {
+  position: absolute;
+  left: 1.3125rem;
+  top: 1.75rem;
+  bottom: 1.75rem;
+  width: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+/* Full by default so the rail reads correctly without script; the scroll
+   animation starts it from empty. */
+.timeline__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: top center;
+}
+
+.timeline__list { list-style: none; padding: 0; display: grid; gap: 1.25rem; }
+
+.tl-step { position: relative; }
+
+.tl-step__no {
+  position: absolute;
+  left: -4.5rem;
+  top: 1.25rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--line);
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: background-color 400ms var(--ease-soft), color 400ms var(--ease-soft),
+              box-shadow 400ms var(--ease-soft);
+}
+
+.tl-step.is-lit .tl-step__no {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.tl-step__card .bezel__core { padding: clamp(1.5rem, 2.6vw, 2.125rem); }
+.tl-step h3 { font-size: clamp(1.375rem, 2.2vw, 1.875rem); margin-bottom: 0.75rem; }
+.tl-step p { color: var(--ink-2); font-size: 1.0625rem; max-width: 56ch; }
+
+/* --------------------------------------------------------------------------
+   Showroom card and ruled facts
+   -------------------------------------------------------------------------- */
+
+.show__card.bezel {
+  padding: 6px;
+  background: color-mix(in srgb, var(--surface-2) 75%, transparent);
+  border-radius: calc(var(--r-card) + 6px);
+  box-shadow: 0 0 0 1px var(--line), 0 30px 60px -32px rgb(var(--shadow) / 0.45);
+}
+
+.show__card .bezel__core { padding: clamp(1.75rem, 3.5vw, 2.75rem); }
+
+.facts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 10.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 0.9375rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.fact dt { display: flex; align-items: center; gap: 0.625rem; font-size: 0.875rem; color: var(--ink-3); }
+.fact dt .icon { width: 1rem; height: 1rem; color: var(--ink-2); }
+.fact dd { font-size: 0.9688rem; font-weight: 500; }
+
+/* --------------------------------------------------------------------------
+   Quote band
+   -------------------------------------------------------------------------- */
+
+.quote__intro { justify-content: center; }
+.promise { margin-top: 0.75rem; }
+.quote__call { margin-top: 0.75rem; color: var(--deep-mute); font-size: 0.9375rem; }
+.quote__call a { color: var(--on-deep); text-underline-offset: 3px; }
+
+.formcard.bezel {
+  padding: 6px;
+  border-radius: calc(var(--r-card) + 6px);
+  background: color-mix(in srgb, var(--on-deep) 12%, transparent);
+  box-shadow: none;
+}
+
+.formcard .bezel__core { padding: clamp(1.5rem, 3vw, 2.25rem); background: var(--surface); color: var(--ink); }
+.done a { color: var(--ink); text-underline-offset: 3px; }
+
+/* --------------------------------------------------------------------------
+   Footer wordmark
+   -------------------------------------------------------------------------- */
+
+.footer { overflow: hidden; }
+
+.footer__mark {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: 13.4vw;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  text-align: center;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--line);
+  user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+   Hamburger morph and full-screen mobile menu
+   -------------------------------------------------------------------------- */
+
+.burger { position: relative; display: block; width: 1.125rem; height: 0.75rem; }
+
+.burger span {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 450ms var(--ease-out);
+}
+
+.burger span:first-child { top: 0; }
+.burger span:last-child { bottom: 0; }
+
+.menu-btn[aria-expanded="true"] .burger span:first-child { transform: translateY(5.25px) rotate(45deg); }
+.menu-btn[aria-expanded="true"] .burger span:last-child { transform: translateY(-5.25px) rotate(-45deg); }
+
+@media (max-width: 960px) {
+  /* A filter on the bar would make it the containing block for the fixed
+     overlay, so the bar drops its blur while the menu is open. */
+  .header[data-menu="true"] .header__bar { backdrop-filter: none; }
+
+  .menu-btn { position: relative; z-index: calc(var(--z-menu) + 1); }
+
+  .nav[data-open="true"] {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 6rem var(--gutter) 3rem;
+    border: 0;
+    border-radius: 0;
+    background: color-mix(in srgb, var(--ground) 96%, transparent);
+    backdrop-filter: blur(24px);
+    box-shadow: none;
+  }
+
+  .nav[data-open="true"] a {
+    padding: 0.5rem 0;
+    background: none;
+    color: var(--ink);
+    font-stretch: 112%;
+    font-weight: 650;
+    font-size: clamp(2rem, 9vw, 3rem);
+    letter-spacing: -0.03em;
+    animation: menuIn 650ms var(--ease-out) both;
+  }
+
+  .nav[data-open="true"] a:nth-child(1) { animation-delay: 60ms; }
+  .nav[data-open="true"] a:nth-child(2) { animation-delay: 120ms; }
+  .nav[data-open="true"] a:nth-child(3) { animation-delay: 180ms; }
+
+  .nav[data-open="true"] .nav__quote {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 999px;
+    font-size: 1.125rem;
+    text-align: center;
+    animation-delay: 240ms;
+  }
+
+  .panel__core { grid-template-columns: 1fr; }
+
+  .proc { grid-template-columns: 1fr; }
+  .proc__intro { position: static; }
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(2rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+html.menu-open { overflow: hidden; }
+
+@media (max-width: 640px) {
+  .timeline { padding-left: 3.5rem; }
+  .timeline__rail { left: 1.0625rem; }
+  .tl-step__no { left: -3.5rem; width: 2.25rem; height: 2.25rem; font-size: 0.8125rem; }
+  .fact { grid-template-columns: 1fr; gap: 0.25rem; }
+}
+
+/* --------------------------------------------------------------------------
+   Scroll reveals. Opacity and transform only, never visibility, so blocks
+   that have not scrolled in are still reachable by keyboard.
+   -------------------------------------------------------------------------- */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 900ms var(--ease-out), transform 900ms var(--ease-out);
+}
+
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .nav[data-open="true"] a { animation: none; }
+}
+
+/* --------------------------------------------------------------------------
+   v4 polish from the second Playwright pass
+   -------------------------------------------------------------------------- */
+
+.nowrap { white-space: nowrap; }
+
+/* Footer: close the gap under the quote band, and size the wordmark to
+   the shell so its last letter is never clipped. */
+.footer { padding-top: clamp(1.5rem, 3vw, 2.5rem); }
+.footer__mark { font-size: 12vw; }
+
+/* ==========================================================================
+   v4.1. Sticky card stack for the equipment range, a full-width frosted
+   header once the page scrolls, and a current-section marker in the nav.
+   ========================================================================== */
+
+/* Equipment stack. Each card sticks a little lower than the one before,
+   so the edges of earlier cards stay visible, like plates loaded on a bar.
+   The script scales and shades the card underneath as the next arrives. */
+.stack { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); padding-bottom: 0.5rem; }
+
+.stack .panel {
+  position: sticky;
+  top: calc(6rem + var(--i, 0) * 1.25rem);
+  width: 100%;
+  height: min(34rem, calc(100svh - 9rem));
+  transform-origin: 50% 0;
+  box-shadow: 0 -24px 48px -36px rgb(var(--shadow) / 0.45);
+}
+
+.stack .panel__core { height: 100%; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); padding: 1.25rem; }
+.stack .panel__media { aspect-ratio: auto; height: 100%; }
+.stack .panel__body { padding: 1.5rem 1.25rem 1rem; }
+.stack .panel__name { font-size: clamp(2rem, 3.4vw, 3rem); }
+.stack .panel__desc { font-size: 1.0625rem; max-width: 40ch; }
+
+.panel__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: var(--ground);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 960px) {
+  .stack .panel { position: relative; top: auto; height: auto; box-shadow: none; }
+  .stack .panel__core { grid-template-columns: 1fr; }
+  .stack .panel__media { aspect-ratio: 16 / 10; height: auto; }
+}
+
+/* Header. At the top of the page it floats clear of the hero. Once the
+   page scrolls it becomes a full-width frosted band with a hairline edge. */
+.header {
+  border-bottom: 1px solid transparent;
+  transition: background-color 400ms var(--ease-soft), border-color 400ms var(--ease-soft),
+              box-shadow 400ms var(--ease-soft), padding 400ms var(--ease-out);
+}
+
+.header[data-stuck="true"] {
+  padding-block: 0.25rem;
+  background: color-mix(in srgb, var(--ground) 84%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border-bottom-color: var(--line);
+  box-shadow: 0 12px 32px -28px rgb(var(--shadow) / 0.6);
+}
+
+.header[data-stuck="true"] .header__bar {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* A filter on the header would trap the fixed mobile menu inside it. */
+.header[data-menu="true"] { -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* Current section in the navigation. */
+.nav a[aria-current="true"] { background: var(--surface-2); color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  .header { transition: none; }
+}
+
+/* ==========================================================================
+   v4.4. Longer dwell on each equipment card, a back-to-top button, a
+   roomier theme picker with a sliding ring, and the legal pages.
+   ========================================================================== */
+
+/* Each card now rests alone at the top for a while before the next card
+   rises into view, so every product stays readable for longer. */
+.stack {
+  --dwell: clamp(16rem, 60svh, 40rem);
+  gap: var(--dwell);
+  padding-bottom: var(--dwell);
+}
+
+.stack .panel { height: min(36rem, calc(100svh - 10rem)); }
+
+@media (max-width: 960px) {
+  .stack { gap: 1.5rem; padding-bottom: 0; }
+}
+
+/* Theme picker. Larger plates, more air, and a ring that
+   glides to the chosen plate instead of jumping. */
+.themes {
+  --size: 1.875rem;
+  --gap: 0.5rem;
+  position: relative;
+  gap: var(--gap);
+  padding: 0.375rem 0.5rem;
+}
+
+.swatch__plate {
+  width: var(--size);
+  height: var(--size);
+  transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 300ms var(--ease-soft);
+}
+
+.swatch:hover .swatch__plate { transform: scale(1.14); }
+
+.themes__ring { display: none; }
+
+@supports selector(:has(*)) {
+  .themes__ring {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: calc(0.5rem - 4px);
+    width: calc(var(--size) + 8px);
+    height: calc(var(--size) + 8px);
+    margin-top: calc((var(--size) + 8px) / -2);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--ink);
+    transform: translateX(calc(var(--idx, 0) * (var(--size) + var(--gap))));
+    transition: transform 650ms var(--ease-out);
+    pointer-events: none;
+  }
+
+  .themes:has(input[value="cobalt"]:checked) { --idx: 1; }
+  .themes:has(input[value="brick"]:checked)  { --idx: 2; }
+  .themes:has(input[value="night"]:checked)  { --idx: 3; }
+
+  .swatch input:checked + .swatch__plate {
+    box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--plate) 72%, #000);
+  }
+}
+
+@media (max-width: 640px) {
+  .themes { --size: 1.5rem; --gap: 0.375rem; padding: 0.3125rem 0.4375rem; }
+}
+
+/* Back to top. A frosted disc that matches the header, with a ring that
+   fills as you scroll so it doubles as a reading-progress gauge. */
+.to-top {
+  position: fixed;
+  right: max(var(--gutter), env(safe-area-inset-right));
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  z-index: 25;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--ink);
+  box-shadow: 0 0 0 1px var(--line), 0 18px 36px -18px rgb(var(--shadow) / 0.55);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px) scale(0.92);
+  transition: opacity 350ms var(--ease-soft), transform 500ms var(--ease-out),
+              visibility 0s linear 500ms, background-color 250ms var(--ease-soft), color 250ms var(--ease-soft);
+}
+
+.to-top.is-shown { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.to-top:hover { background: var(--accent); color: var(--on-accent); }
+.to-top:active { transform: scale(0.94); }
+
+.to-top .icon { position: relative; width: 1.125rem; height: 1.125rem; transition: transform 400ms var(--ease-out); }
+.to-top:hover .icon { transform: translateY(-2px); }
+
+.to-top__ring {
+  position: absolute;
+  inset: 3px;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.to-top__track { fill: none; stroke: var(--line); stroke-width: 2; }
+
+.to-top__progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+.to-top:hover .to-top__progress { stroke: var(--on-accent); }
+.to-top:hover .to-top__track { stroke: color-mix(in srgb, var(--on-accent) 30%, transparent); }
+.to-top--plain .to-top__ring { display: none; }
+
+html.menu-open .to-top { opacity: 0; visibility: hidden; }
+#main:focus { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .to-top, .themes__ring, .swatch__plate { transition: none; }
+}
+
+/* Legal links beside the copyright line. */
+.footer__legal { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; }
+.footer__legal a { color: var(--ink-3); }
+.footer__legal a:hover { color: var(--ink); }
+
+/* Legal pages, in v4's own language: a facts card in a double bezel, and
+   the contents drawn as the same timeline as the process section. Its
+   nodes light as you read and its rail fills toward the current section.
+   Each section sits in its own bezel card. */
+.lp { padding-top: clamp(2rem, 5vw, 3.5rem); padding-bottom: var(--band); }
+
+.lp-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.lp-head__text { display: grid; gap: 1rem; justify-items: start; }
+
+.lp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 0.5rem 0.75rem;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--line);
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 250ms var(--ease-soft), background-color 250ms var(--ease-soft);
+}
+
+.lp-back:hover { color: var(--ink); background: var(--surface-2); }
+.lp-back .icon { width: 1rem; height: 1rem; transition: transform 400ms var(--ease-out); }
+.lp-back:hover .icon { transform: translateX(-3px); }
+
+.lp-head h1 { font-size: clamp(2.5rem, 5.4vw, 4.5rem); }
+.lp-lede { color: var(--ink-2); font-size: 1.125rem; max-width: 50ch; }
+
+.lp-facts .bezel__core { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); }
+.lp-fact { display: grid; gap: 0.375rem; padding: 1.125rem 1.25rem; }
+.lp-fact + .lp-fact { border-left: 1px solid var(--line); }
+.lp-fact dt { font-size: 0.8125rem; color: var(--ink-3); }
+.lp-fact dd { margin: 0; font-stretch: 112%; font-weight: 650; font-size: 1.25rem; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+
+.lp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+.lp-rail { position: sticky; top: 7rem; }
+.lp-rail h2 { margin-bottom: 1rem; font-size: 0.9375rem; font-stretch: 100%; letter-spacing: 0; color: var(--ink-3); }
+
+.lp-rail__list {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lp-rail__track {
+  position: absolute;
+  left: 1.0625rem;
+  top: 1.25rem;
+  bottom: 1.25rem;
+  width: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.lp-rail__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: top center;
+  transform: scaleY(var(--progress, 0));
+  transition: transform 800ms var(--ease-out);
+}
+
+.lp-rail a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.25rem 0.75rem 0.25rem 0;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: color 300ms var(--ease-soft);
+}
+
+.lp-rail a:hover { color: var(--ink); }
+
+.lp-rail__node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--line);
+  color: var(--ink-3);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: background-color 450ms var(--ease-soft), color 450ms var(--ease-soft),
+              box-shadow 450ms var(--ease-soft), transform 550ms var(--ease-out);
+}
+
+.lp-rail a.is-passed .lp-rail__node,
+.lp-rail a.is-active .lp-rail__node { background: var(--accent); color: var(--on-accent); box-shadow: none; }
+
+.lp-rail a.is-active { color: var(--ink); font-weight: 600; }
+
+.lp-rail a.is-active .lp-rail__node {
+  transform: scale(1.12);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.lp-doc { display: grid; gap: 1.25rem; }
+.lp-sec .bezel__core { padding: clamp(1.75rem, 3.5vw, 2.75rem); }
+
+.lp-sec h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-bottom: 0.875rem;
+  font-size: clamp(1.375rem, 2.2vw, 1.875rem);
+  scroll-margin-top: 7.5rem;
+}
+
+.lp-sec__no {
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  font-stretch: 100%;
+  font-weight: 700;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.lp-sec p,
+.lp-sec li { color: var(--ink-2); font-size: 1.0625rem; line-height: 1.7; max-width: 68ch; }
+.lp-sec p + p { margin-top: 0.875rem; }
+.lp-sec ul { display: grid; gap: 0.5rem; margin-top: 0.75rem; padding-left: 1.25rem; }
+.lp-sec strong { color: var(--ink); font-weight: 600; }
+.lp-sec a { color: var(--ink); text-underline-offset: 3px; }
+.lp-sec code { font-size: 0.9375em; padding: 0.1em 0.45em; border-radius: 8px; background: var(--surface-2); }
+
+@media (max-width: 960px) {
+  .lp-head, .lp-grid { grid-template-columns: 1fr; }
+  .lp-rail { position: static; }
+}
+
+@media (max-width: 560px) {
+  .lp-facts .bezel__core { grid-template-columns: 1fr; }
+  .lp-fact + .lp-fact { border-left: 0; border-top: 1px solid var(--line); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-rail__fill, .lp-rail__node, .lp-rail a { transition: none; }
+}
+
+/* Theme switch. For the instant the palette swaps, every transition is off,
+   so the header, buttons and cards change with the page instead of fading
+   in behind it. */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after { transition: none !important; }
+
+/* Theme reveal with a feathered edge. The new palette spreads out from the
+   pressed plate as a soft-edged circle rather than a hard cut. --vt-r is
+   registered so the browser can interpolate it frame by frame. */
+@property --vt-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+html.vt-soft::view-transition-new(root) {
+  --vt-feather: 140px;
+  -webkit-mask-image: radial-gradient(circle at var(--vt-x, 50%) var(--vt-y, 50%),
+    #000 calc(var(--vt-r) - var(--vt-feather)), transparent var(--vt-r));
+  mask-image: radial-gradient(circle at var(--vt-x, 50%) var(--vt-y, 50%),
+    #000 calc(var(--vt-r) - var(--vt-feather)), transparent var(--vt-r));
+}
+
+/* The selection ring glides at the same pace as the reveal. */
+.themes__ring { transition: transform 1000ms cubic-bezier(0.65, 0, 0.35, 1); }
+
+/* Legal cards settle in just before they reach the screen. */
+.js [data-legal-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 550ms var(--ease-out), transform 550ms var(--ease-out),
+              border-color 300ms var(--ease-soft), box-shadow 400ms var(--ease-soft);
+}
+
+.js [data-legal-reveal].is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-legal-reveal] { opacity: 1; transform: none; }
+}
